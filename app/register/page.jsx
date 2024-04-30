@@ -13,6 +13,10 @@ export default function Page() {
     gender: "",
   });
 
+  if (!Domain) {
+    return null;
+  }
+
   const handleChange = (e) => {
     setFormData({
       ...formData,

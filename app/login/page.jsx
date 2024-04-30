@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Domain } from "@/utils/constants";
+
 export default function Login() {
   const [formData, setFormData] = useState({
     email: "",
@@ -12,6 +13,10 @@ export default function Login() {
   const [responseData, setResponseData] = useState(null);
 
   const router = useRouter();
+
+  if (!Domain) {
+    return null;
+  }
 
   const handleChange = (e) => {
     setFormData({

@@ -47,6 +47,9 @@ export default function Home() {
   };
 
   useEffect(() => {
+    if (!Domain) {
+      return null;
+    }
     getUserInfo();
   }, []);
 

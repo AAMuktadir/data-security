@@ -40,7 +40,7 @@ export default function Page() {
     };
 
     try {
-      const response = await fetch("/api/users", {
+      const response = await fetch(`${Domain}/api/users`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -60,6 +60,9 @@ export default function Page() {
   };
 
   useEffect(() => {
+    if (!Domain) {
+      return null;
+    }
     getUserInfo();
   }, []);
   return (
