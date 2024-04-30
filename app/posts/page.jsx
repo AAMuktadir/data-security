@@ -20,18 +20,18 @@ export default function Page() {
   };
 
   const getUserInfo = async () => {
-    try {
-      const response = await fetch(`${Domain}/api/extractdata`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const data = await response.json();
-      setUserData(data.data);
-    } catch (error) {
-      console.log(error);
-    }
+    // try {
+    //   const response = await fetch(`${Domain}/api/extractdata`, {
+    //     method: "GET",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //   });
+    //   const data = await response.json();
+    //   setUserData(data.data);
+    // } catch (error) {
+    //   console.log(error);
+    // }
   };
   const handleSubmit = async (postData) => {
     const data = {
@@ -39,24 +39,24 @@ export default function Page() {
       ...postData,
     };
 
-    try {
-      const response = await fetch(`${Domain}/api/users`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+    // try {
+    //   const response = await fetch(`${Domain}/api/users`, {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
 
-        body: JSON.stringify(data),
-      });
+    //     body: JSON.stringify(data),
+    //   });
 
-      const rdata = await response.json();
+    //   const rdata = await response.json();
 
-      if (!response.ok) {
-        console.error("New post addition error:", rdata.message);
-      }
-    } catch (error) {
-      console.error("New post addition error:", error);
-    }
+    //   if (!response.ok) {
+    //     console.error("New post addition error:", rdata.message);
+    //   }
+    // } catch (error) {
+    //   console.error("New post addition error:", error);
+    // }
   };
 
   useEffect(() => {

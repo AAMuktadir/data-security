@@ -11,18 +11,18 @@ export default function Home() {
   const [showEncrypted, setShowEncrypted] = useState(false);
 
   const getUserInfo = async () => {
-    try {
-      const response = await fetch(`${Domain}/api/extractdata`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const data = await response.json();
-      setUserData(data.data);
-    } catch (error) {
-      console.log(error);
-    }
+    // try {
+    //   const response = await fetch(`${Domain}/api/extractdata`, {
+    //     method: "GET",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //   });
+    //   const data = await response.json();
+    //   setUserData(data.data);
+    // } catch (error) {
+    //   console.log(error);
+    // }
   };
 
   const handleUpdate = async (data) => {
