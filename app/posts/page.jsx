@@ -62,8 +62,9 @@ export default function Page() {
   useEffect(() => {
     if (!Domain) {
       return null;
+    } else {
+      getUserInfo();
     }
-    getUserInfo();
   }, []);
   return (
     <div className="">
