@@ -62,7 +62,7 @@ export default function Home() {
 
       <div className="">
         {userData ? (
-          <div className="text-xl py-20 px-20">
+          <div className="text-xl py-20 px-4 sm:px-20">
             <h3>
               <span className="font-medium">Name: </span>{" "}
               {showEncrypted ? (
