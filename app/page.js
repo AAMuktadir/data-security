@@ -10,15 +10,15 @@ export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showEncrypted, setShowEncrypted] = useState(false);
 
-  const getUserInfo = async () => {
+  const getUserInfo = () => {
     try {
-      const response = await fetch(`${Domain}/api/extractdata`, {
+      const response = fetch(`${Domain}/api/extractdata`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
       });
-      const data = await response.json();
+      const data = response.json();
       setUserData(data.data);
     } catch (error) {
       console.log(error);
