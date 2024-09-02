@@ -37,7 +37,11 @@ export async function POST(req) {
       success: true,
     });
 
-    response.cookies.set("token", token, { httpOnly: true });
+    response.cookies.set("token", token, {
+      httpOnly: true,
+      secure: true,
+      domain: "https://dataencryption.vercel.app/",
+    });
     return response;
   } catch (error) {
     console.error("Login error:", error.message);
