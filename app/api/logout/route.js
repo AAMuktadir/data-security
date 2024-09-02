@@ -10,6 +10,7 @@ export async function GET() {
     response.cookies.set("token", "", {
       httpOnly: true,
       secure: true,
+      path: "/",
       expires: new Date(0),
     });
 
