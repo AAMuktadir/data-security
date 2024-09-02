@@ -12,7 +12,6 @@ export async function GET() {
       secure: true,
       expires: new Date(0),
     });
-    //hello
 
     return response;
   } catch (error) {
