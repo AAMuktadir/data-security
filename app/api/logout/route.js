@@ -8,9 +8,8 @@ export async function GET() {
     });
 
     response.cookies.set("token", "", {
-      httpOnly: true,
+      httpOnly: false,
       secure: true,
-      path: "/",
       expires: new Date(0),
     });
 
