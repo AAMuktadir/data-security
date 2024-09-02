@@ -8,7 +8,8 @@ export async function GET() {
     });
 
     response.cookies.set("token", "", {
-      httpOnly: false, //here I have changed httpOnly: false, it was true
+      httpOnly: true,
+      secure: true, // Only send the cookie over HTTPS
       expires: new Date(0),
     });
 
