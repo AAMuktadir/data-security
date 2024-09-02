@@ -9,7 +9,7 @@ export async function GET() {
 
     response.cookies.set("token", "", {
       httpOnly: true,
-      secure: true, // Only send the cookie over HTTPS
+      path: "/",
       expires: new Date(0),
     });
 

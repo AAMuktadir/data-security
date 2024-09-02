@@ -37,7 +37,7 @@ export async function POST(req) {
       success: true,
     });
 
-    response.cookies.set("token", token, { httpOnly: true, secure: true });
+    response.cookies.set("token", token, { httpOnly: true, path: "/" });
     return response;
   } catch (error) {
     console.error("Login error:", error.message);
@@ -48,7 +48,5 @@ export async function POST(req) {
         success: false,
       }
     );
-
-    //hello
   }
 }
