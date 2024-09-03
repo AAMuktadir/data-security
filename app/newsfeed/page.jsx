@@ -143,7 +143,7 @@ export default function Page() {
     }
   }, []);
   return (
-    <div className="">
+    <div className="pb-20">
       <Header name="Newsfeed" />
       <div className="px-12">
         <div className="py-6">
@@ -163,11 +163,11 @@ export default function Page() {
         <div className="">
           {feedData &&
             (feedData && feedData.length > 0 ? (
-              <div className="flex flex-wrap gap-8">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
                 {feedData.map((post, index) => (
                   <div
                     key={index}
-                    className="bg-white rounded-lg shadow-lg p-2 w-72 h-80 pb-4 overflow-visible"
+                    className="bg-white rounded-lg shadow-lg p-2 w-full  pb-1"
                   >
                     <section className="flex justify-between items-start pb-2">
                       <p className="pb-1 text-xs text-gray-500 w-2/5">
@@ -178,9 +178,9 @@ export default function Page() {
                       </p>
                     </section>
 
-                    <div className="flex flex-col justify-between h-full">
+                    <div className="flex flex-col justify-between h-40">
                       <section className="px-4">
-                        <h2 className="text-center text-lg font-medium pb-2">
+                        <h2 className="text-lg font-medium pb-2">
                           {decrypt(post.title)}
                         </h2>
 
