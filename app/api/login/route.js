@@ -4,6 +4,7 @@ import connect from "@/lib/mongodb";
 import User from "@/lib/models/User";
 import { ComparePasswords } from "@/utils/managePassword";
 import jwt from "jsonwebtoken";
+import { cookies } from "next/headers";
 
 export async function POST(req) {
   await connect();
@@ -37,7 +38,7 @@ export async function POST(req) {
       success: true,
     });
 
-    response.cookies.set("token", token, {
+    cookies().set("token", token, {
       httpOnly: true,
       secure: true,
     });

@@ -23,6 +23,16 @@ export default function Header({ name }) {
         >
           Home
         </Link>
+
+        <Link
+          href="/newsfeed"
+          className={`bg-yellow-300 p-2 hover:bg-yellow-600 hover:text-white duration-300 ${
+            pathname == "/newsfeed" ? "hidden" : ""
+          }`}
+        >
+          Newsfeed
+        </Link>
+
         <Link
           href="/posts"
           className={`bg-yellow-300 p-2 hover:bg-yellow-600 hover:text-white duration-300 ${
@@ -63,7 +73,7 @@ export default function Header({ name }) {
       <div
         className={`${
           isMenuOpen ? "flex" : "hidden"
-        } flex-col items-center fixed inset-0 bg-gray-300 p-8 md:hidden`}
+        } flex-col fixed inset-0 bg-gray-300 p-8 md:hidden text-center`}
       >
         <Link
           href="/"
@@ -72,6 +82,15 @@ export default function Header({ name }) {
           }`}
         >
           Home
+        </Link>
+
+        <Link
+          href="/newsfeed"
+          className={`bg-yellow-300 p-2 mb-2 hover:bg-yellow-600 hover:text-white duration-300 ${
+            pathname == "/newsfeed" ? "hidden" : ""
+          }`}
+        >
+          Newsfeed
         </Link>
         <Link
           href="/posts"
