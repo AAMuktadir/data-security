@@ -231,7 +231,7 @@ export default function Page() {
 
           {/* Modal */}
           {selectedPost && (
-            <div className="fixed inset-0 flex justify-center items-center bg-gray-800 bg-opacity-75 px-40">
+            <div className="fixed inset-0 flex justify-center items-center bg-gray-800 bg-opacity-75 px-4 sm:px-40">
               <div className="bg-white rounded-lg shadow-xl p-8">
                 <h2 className="text-center text-3xl font-bold mb-4">
                   {decrypt(selectedPost.title)}
