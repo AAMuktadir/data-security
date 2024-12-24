@@ -5,40 +5,43 @@ export default function Databasetable({ user }) {
     <div className="bg-gray-100 p-4 md:p-8 rounded-lg shadow-md text-wrap">
       <p className="text-lg font-bold mb-2">User Details:</p>
       <div className="space-y-4">
-        <p>
+        <p className="break-words">
           <span className="font-semibold">_id:</span> {user._id}
         </p>
-        <p>
-          <span className="font-semibold">Name:</span> {user.name}
+        <p className="break-words">
+          <span className="font-semibold">name: </span> {user.name}
         </p>
-        <p>
-          <span className="font-semibold">Email:</span> {user.email}
+
+        <p className="break-words">
+          <span className="font-semibold">email:</span> {user.email}
         </p>
-        <p>
-          <span className="font-semibold">Gender:</span> {user.gender}
+
+        <p className="break-words">
+          <span className="font-semibold">university:</span> {user.university}
         </p>
-        <div>
-          <p className="font-semibold">Posts:</p>
-          <ul className="list-disc pl-6">
-            {user.posts.map((post, index) => (
-              <li key={post._id} className="mb-2">
-                <p>
-                  <span className="font-semibold">Title:</span> {post.title}
-                </p>
-                <p>
-                  <span className="font-semibold">Content:</span> {post.content}
-                </p>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <p>
-          <span className="font-semibold">Created At:</span> {user.createdAt}
+        <p className="break-words">
+          <span className="font-semibold">department:</span> {user.department}
         </p>
-        <p>
-          <span className="font-semibold">Updated At:</span> {user.updatedAt}
+
+        <p className="break-words">
+          <span className="font-semibold">studentID:</span> {user.studentID}
         </p>
-        <p>
+
+        <p className="break-words">
+          <span className="font-semibold">bio:</span> {user.bio}
+        </p>
+
+        <p className="break-words">
+          <span className="font-semibold">gender:</span> {user.gender}
+        </p>
+
+        <p className="break-words">
+          <span className="font-semibold">createdAt:</span> {user.createdAt}
+        </p>
+        <p className="break-words">
+          <span className="font-semibold">updatedAt:</span> {user.updatedAt}
+        </p>
+        <p className="break-words">
           <span className="font-semibold">__v:</span> {user.__v}
         </p>
       </div>

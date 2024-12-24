@@ -7,7 +7,7 @@ import { Domain } from "@/utils/constants";
 
 export default function Login() {
   const [formData, setFormData] = useState({
-    email: "",
+    studentID: "",
     password: "",
   });
   const [responseData, setResponseData] = useState(null);
@@ -62,18 +62,16 @@ export default function Login() {
           <input type="hidden" name="remember" value="true" />
           <div className="rounded-md shadow-sm -space-y-px">
             <div className="py-4">
-              <label htmlFor="email" className="sr-only py-8">
-                Email
-              </label>
+              <label htmlFor="text" className="sr-only py-8"></label>
               <input
-                id="email"
-                name="email"
+                id="studentID"
+                name="studentID"
                 type="text"
-                autoComplete="email"
+                autoComplete="text"
                 required
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="email"
-                value={formData.email}
+                placeholder="Student ID"
+                value={formData.studentID}
                 onChange={handleChange}
               />
             </div>

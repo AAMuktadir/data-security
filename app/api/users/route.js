@@ -6,7 +6,8 @@ import { encrypt } from "@/utils/crypto";
 export async function PATCH(request) {
   await connect();
 
-  const { userId, name, email, gender } = await request.json();
+  const { userId, name, email, university, department, gender, bio } =
+    await request.json();
 
   try {
     // Find the user by userId
@@ -20,7 +21,10 @@ export async function PATCH(request) {
 
     // Update user fields if provided
     if (name) existingUser.name = encrypt(name);
-    if (email) existingUser.email = email;
+    if (email) existingUser.email = encrypt(email);
+    if (university) existingUser.university = encrypt(university);
+    if (department) existingUser.department = encrypt(department);
+    if (bio) existingUser.bio = encrypt(bio);
     if (gender) existingUser.gender = encrypt(gender);
 
     // Save the updated user
@@ -80,19 +84,3 @@ export async function POST(request) {
     });
   }
 }
-
-// export async function GET(request) {
-//   try {
-//     const userID = await getDataFromToken(request);
-//     const user = await User.findById({ _id: userID }).select("-password");
-//     return NextResponse.json(
-//       { message: "User found", data: user },
-//       {
-//         status: 200,
-//         success: true,
-//       }
-//     );
-//   } catch {
-//     return NextResponse.json({ error: error.message }, { status: 400 });
-//   }
-// }

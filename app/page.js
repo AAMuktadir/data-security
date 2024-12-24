@@ -2,8 +2,9 @@
 import { useState, useEffect } from "react";
 import { decrypt } from "@/utils/crypto";
 import Header from "@/components/header";
-import UpdateUserInfoModal from "@/components/updateUserModal";
 import { Domain } from "@/utils/constants";
+import UserProfile from "@/components/userProfile";
+import UpdateUserInfoModal from "@/components/updateUserModal";
 
 export default function Home() {
   const [userData, setUserData] = useState(null);
@@ -37,6 +38,7 @@ export default function Home() {
       });
 
       const rdata = await response.json();
+      window.location.reload();
 
       if (!response.ok) {
         console.error("Update error:", rdata.message);
@@ -59,62 +61,20 @@ export default function Home() {
       <Header
         name={(userData && "Hey " + decrypt(userData.name)) || "Hey there"}
       />
+      <UserProfile
+        userData={userData}
+        showEncrypted={showEncrypted}
+        setShowEncrypted={setShowEncrypted}
+        setIsModalOpen={setIsModalOpen}
+      />
 
-      <div className="">
-        {userData ? (
-          <div className="text-xl py-20 px-4 sm:px-20">
-            <h3>
-              <span className="font-medium">Name: </span>{" "}
-              {showEncrypted ? (
-                <span className="">{userData.name}</span>
-              ) : (
-                <span className="">{decrypt(userData.name)}</span>
-              )}
-            </h3>
-            <h3 className="py-4">
-              <span className="font-medium">Email: </span> {userData.email}{" "}
-            </h3>
-            <h3>
-              <span className="font-medium">Gender: </span>{" "}
-              {showEncrypted ? (
-                <span>{userData.gender}</span>
-              ) : (
-                <span className="">{decrypt(userData.gender)}</span>
-              )}
-            </h3>
-
-            <div className="py-8 flex gap-12 text-lg">
-              <button
-                onClick={() => setIsModalOpen(true)}
-                className="bg-blue-300 p-2 hover:bg-blue-400"
-              >
-                Update informaiton
-              </button>
-              <button
-                onClick={
-                  showEncrypted
-                    ? () => setShowEncrypted(false)
-                    : () => setShowEncrypted(true)
-                }
-                className={`${
-                  showEncrypted ? "bg-green-500" : "bg-purple-400"
-                } p-2 `}
-              >
-                {showEncrypted ? "Show actual data" : "Show encrypted data"}
-              </button>
-            </div>
-            {isModalOpen && (
-              <UpdateUserInfoModal
-                userData={userData}
-                onClose={() => setIsModalOpen(false)}
-                onUpdate={handleUpdate}
-              />
-            )}
-          </div>
-        ) : (
-          []
-        )}
-      </div>
+      {isModalOpen && (
+        <UpdateUserInfoModal
+          userData={userData}
+          onClose={() => setIsModalOpen(false)} // Close modal
+          onUpdate={handleUpdate} // Handle update
+        />
+      )}
     </main>
   );
 }

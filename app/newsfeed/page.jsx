@@ -149,7 +149,7 @@ export default function Page() {
         <div className="py-6">
           <button
             onClick={() => setIsModalOpen(true)}
-            className="bg-blue-500 text-white px-6 py-2 rounded-md pb-4 hover:bg-blue-600"
+            className="bg-blue-600 text-white px-4 py-1 rounded-md hover:bg-blue-500 duration-300"
           >
             Add New Post
           </button>
@@ -167,55 +167,50 @@ export default function Page() {
                 {feedData.map((post, index) => (
                   <div
                     key={index}
-                    className="bg-white rounded-lg shadow-lg p-2 w-full  pb-1"
+                    className="bg-gray-50 border border-gray-200 rounded-lg shadow-md p-4 w-full pb-2 hover:shadow-lg transition-shadow duration-300"
                   >
-                    <section className="flex justify-between items-start pb-2">
-                      <p className="pb-1 text-xs text-gray-500 w-2/5">
+                    <section className="flex justify-between items-center pb-3">
+                      <p className="text-xs text-gray-400 w-2/5">
                         {getDate(post.createdAt)}
                       </p>
-                      <p className="text-sm font-light text-black text-right border rounded-lg p-1 bg-green-200">
+                      <p className="text-sm font-semibold text-gray-700 bg-green-100 border border-green-200 rounded-lg px-3 py-1">
                         {decrypt(post.author)}
                       </p>
                     </section>
 
                     <div className="flex flex-col justify-between h-40">
-                      <section className="px-4">
-                        <h2 className="text-lg font-medium pb-2">
+                      <section className="px-2">
+                        <h2 className="text-lg font-semibold text-gray-800 mb-2 truncate">
                           {decrypt(post.title)}
                         </h2>
-
-                        <p className="text-gray-600 text-sm">
+                        <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
                           {decrypt(post.content).slice(0, 100) +
-                            (post.content.length > 100 ? "..." : "")}
+                            (decrypt(post.content).length > 100 ? "..." : "")}
                         </p>
                       </section>
 
-                      <section className="flex items-center justify-between">
-                        <p className="">
-                          {post.author_id == userData?._id && (
-                            <div className="">
-                              <p
-                                className="text-red-500 rounded-xl cursor-pointer"
-                                onClick={() => openDeleteModal(post._id)}
-                              >
-                                Delete
-                              </p>
-
-                              <ConfirmDelete
-                                isOpen={isDeleteModalOpen}
-                                onClose={closeDeleteModal}
-                                onConfirm={handleConfirm}
-                                postId={currentPostId}
-                              />
-                            </div>
-                          )}
-                        </p>
-
+                      <section className="flex items-center justify-between mt-3">
+                        {post.author_id === userData?._id && (
+                          <div>
+                            <p
+                              className="text-red-500 text-sm font-medium cursor-pointer hover:underline"
+                              onClick={() => openDeleteModal(post._id)}
+                            >
+                              Delete
+                            </p>
+                            <ConfirmDelete
+                              isOpen={isDeleteModalOpen}
+                              onClose={closeDeleteModal}
+                              onConfirm={handleConfirm}
+                              postId={currentPostId}
+                            />
+                          </div>
+                        )}
                         <p
-                          className="text-black cursor-pointer"
+                          className="text-blue-500 text-sm font-medium cursor-pointer hover:underline"
                           onClick={() => openModal(post)}
                         >
-                          View post
+                          View Post
                         </p>
                       </section>
                     </div>
@@ -231,18 +226,26 @@ export default function Page() {
 
           {/* Modal */}
           {selectedPost && (
-            <div className="fixed inset-0 flex justify-center items-center bg-gray-800 bg-opacity-75 px-4 sm:px-40">
-              <div className="bg-white rounded-lg shadow-xl p-8">
-                <h2 className="text-center text-3xl font-bold mb-4">
-                  {decrypt(selectedPost.title)}
-                </h2>
-                <p className="text-gray-700">{decrypt(selectedPost.content)}</p>
-                <button
-                  className="mt-6 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
-                  onClick={closeModal}
-                >
-                  Close
-                </button>
+            <div className="fixed inset-0 flex justify-center items-center bg-gray-800 bg-opacity-50 px-4 sm:px-6">
+              <div className="bg-white rounded-lg shadow-lg w-full max-w-md h-96 flex flex-col overflow-hidden">
+                <div className="p-6 border-b">
+                  <h2 className="text-center text-2xl font-semibold text-gray-800">
+                    {decrypt(selectedPost.title)}
+                  </h2>
+                </div>
+                <div className="p-6 overflow-y-auto flex-1">
+                  <p className="text-gray-600 text-sm leading-relaxed">
+                    {decrypt(selectedPost.content)}
+                  </p>
+                </div>
+                <div className="p-4 border-t text-center">
+                  <button
+                    className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-200"
+                    onClick={closeModal}
+                  >
+                    Close
+                  </button>
+                </div>
               </div>
             </div>
           )}

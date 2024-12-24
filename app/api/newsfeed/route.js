@@ -12,6 +12,7 @@ export async function POST(request) {
     // Encrypt the title and content
     const encryptedTitle = encrypt(title);
     const encryptedContent = encrypt(content);
+
     const newFeed = new newsFeed({
       author,
       author_id,

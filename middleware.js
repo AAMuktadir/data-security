@@ -16,13 +16,5 @@ export function middleware(request) {
 }
 
 export const config = {
-  matcher: [
-    "/",
-    "/login",
-    "/logout",
-    "/register",
-    "/posts",
-    "/database",
-    "/newsfeed",
-  ],
+  matcher: ["/", "/login", "/logout", "/register", "/database", "/newsfeed"],
 };

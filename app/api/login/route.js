@@ -9,10 +9,10 @@ import { cookies } from "next/headers";
 export async function POST(req) {
   await connect();
 
-  const { email, password } = await req.json();
+  const { studentID, password } = await req.json();
 
   try {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ studentID });
     if (!user) {
       throw new Error("User not found");
     }
@@ -25,7 +25,7 @@ export async function POST(req) {
     //create token data
     const tokenData = {
       id: user._id,
-      email: user.email,
+      studentID: user.studentID,
     };
 
     //create token
@@ -42,6 +42,13 @@ export async function POST(req) {
       httpOnly: true,
       secure: true,
     });
+
+    //for ip address
+
+    // cookies().set("token", token, {
+    //   httpOnly: true,
+    //   secure: process.env.NODE_ENV === "production",
+    // });
 
     return response;
   } catch (error) {
