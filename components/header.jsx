@@ -13,9 +13,11 @@ export default function Header({ name }) {
       {/* Desktop Header */}
       <div className="max-w-7xl mx-auto flex items-center justify-between py-4 px-4 sm:px-8">
         <div className="flex items-center gap-4">
-          <div className="p-4 bg-gray-800 text-white rounded-full flex items-center justify-center text-sm sm:text-lg font-bold text-center">
-            <Link href={"/"}>DS</Link>
-          </div>
+          <Link href={"/"}>
+            <div className="p-4 bg-gray-800 text-white rounded-full flex items-center justify-center text-sm sm:text-lg font-bold text-center">
+              DS
+            </div>
+          </Link>
           <h4 className="text-lg sm:text-xl font-semibold text-gray-800">
             {name}
           </h4>
