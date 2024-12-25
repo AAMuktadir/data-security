@@ -6,6 +6,7 @@ import Header from "@/components/header";
 import { decrypt } from "@/utils/crypto";
 import { Domain } from "@/utils/constants";
 import ConfirmDelete from "@/components/newsfeed/confirmDelete";
+import PostModal from "@/components/newsfeed/postModal";
 
 export default function Page() {
   const [userData, setUserData] = useState(null);
@@ -226,28 +227,11 @@ export default function Page() {
 
           {/* Modal */}
           {selectedPost && (
-            <div className="fixed inset-0 flex justify-center items-center bg-gray-800 bg-opacity-50 px-4 sm:px-6 py-12 sm:py-0">
-              <div className="bg-white rounded-lg shadow-lg w-full max-w-2xl h-full sm:h-96 flex flex-col overflow-hidden">
-                <div className="p-6 border-b">
-                  <h2 className="text-center text-2xl font-semibold text-gray-800">
-                    {decrypt(selectedPost.title)}
-                  </h2>
-                </div>
-                <div className="p-6 overflow-y-auto flex-1">
-                  <p className="text-gray-600 text-sm leading-relaxed">
-                    {decrypt(selectedPost.content)}
-                  </p>
-                </div>
-                <div className="p-4 border-t text-center">
-                  <button
-                    className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-200"
-                    onClick={closeModal}
-                  >
-                    Close
-                  </button>
-                </div>
-              </div>
-            </div>
+            <PostModal
+              selectedPost={selectedPost}
+              closeModal={closeModal}
+              userData={userData}
+            />
           )}
         </div>
       </div>
