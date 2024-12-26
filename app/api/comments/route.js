@@ -68,3 +68,33 @@ export async function DELETE(request) {
     return NextResponse.json({ error: error.message }, { status: 400 });
   }
 }
+
+export async function GET(request) {
+  try {
+    await connect();
+
+    const { searchParams } = new URL(request.url);
+    const postID = searchParams.get("id"); // Get postID from query params
+
+    if (!postID) {
+      return NextResponse.json(
+        { error: "Post ID is required" },
+        { status: 400 }
+      );
+    }
+
+    // Find the specific post by ID
+    const post = await newsFeed.findById(postID);
+
+    if (!post) {
+      return NextResponse.json({ error: "Post not found" }, { status: 404 });
+    }
+
+    return NextResponse.json(
+      { message: "Post found", data: post },
+      { status: 200 }
+    );
+  } catch (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}

@@ -7,6 +7,7 @@ import { decrypt } from "@/utils/crypto";
 import { Domain } from "@/utils/constants";
 import ConfirmDelete from "@/components/newsfeed/confirmDelete";
 import PostModal from "@/components/newsfeed/postModal";
+import Link from "next/link";
 
 export default function Page() {
   const [userData, setUserData] = useState(null);
@@ -68,7 +69,7 @@ export default function Page() {
         },
         body: JSON.stringify(data),
       });
-      window.location.reload();
+      getNewsfeed();
     } catch (error) {
       console.log(error);
     }
@@ -111,7 +112,7 @@ export default function Page() {
       if (!response.ok) {
         console.error("New post addition error:", rdata.message);
       } else {
-        window.location.reload();
+        getNewsfeed();
       }
     } catch (error) {
       console.error("New post addition error:", error);
@@ -207,11 +208,19 @@ export default function Page() {
                             />
                           </div>
                         )}
+
+                        <Link
+                          href={`/newsfeed/${post._id}`}
+                          className="text-sm text-blue-500"
+                        >
+                          {" "}
+                          View Post{" "}
+                        </Link>
                         <p
                           className="text-blue-500 text-sm font-medium cursor-pointer hover:underline"
                           onClick={() => openModal(post)}
                         >
-                          View Post
+                          Quick View
                         </p>
                       </section>
                     </div>

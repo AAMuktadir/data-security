@@ -38,7 +38,7 @@ export default function Home() {
       });
 
       const rdata = await response.json();
-      window.location.reload();
+      getUserInfo();
 
       if (!response.ok) {
         console.error("Update error:", rdata.message);
