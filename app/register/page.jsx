@@ -8,6 +8,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 export default function Page() {
   const [studentExists, setStudentExists] = useState(null);
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -55,6 +56,7 @@ export default function Page() {
   };
 
   const handleSubmit = async (e) => {
+    setIsLoading(true);
     e.preventDefault();
 
     try {
@@ -78,6 +80,8 @@ export default function Page() {
     } catch (error) {
       console.error("Registration error:", error);
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -225,9 +229,14 @@ export default function Page() {
 
             <button
               type="submit"
-              className="w-full px-6 py-2 mt-4 text-white bg-blue-600 rounded-lg hover:bg-blue-900"
+              disabled={isLoading}
+              className={`w-full flex justify-center px-6 py-3 mt-4 text-sm font-medium rounded-lg text-white ${
+                isLoading
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-blue-600 hover:bg-blue-900"
+              } focus:outline-none focus:ring-2 focus:ring-blue-500`}
             >
-              Register
+              {isLoading ? "Registering..." : "Register"}
             </button>
           </div>
         </form>
