@@ -102,6 +102,23 @@ export default function Page({ params }) {
     }
   };
 
+  const getDate = (data) => {
+    const date = new Date(data);
+
+    const options = {
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    };
+
+    const formattedDate = date.toLocaleString("en-GB", options);
+
+    return formattedDate;
+  };
+
   useEffect(() => {
     if (!Domain) {
       return null;
@@ -126,6 +143,10 @@ export default function Page({ params }) {
               </p>
             </div>
             <div className="p-4 sm:p-6 overflow-y-auto flex-1">
+              <p className="text-gray-500 text-sm pb-2">
+                {getDate(selectedPost.createdAt)}
+              </p>
+
               <p className="text-gray-600 text-sm sm:text-lg leading-relaxed text-justify">
                 {decrypt(selectedPost.content)}
               </p>
@@ -145,9 +166,13 @@ export default function Page({ params }) {
                       <div className="flex justify-between">
                         <div className="">
                           {/* Writer Name */}
-                          <div className="flex items-center">
-                            <p className="font-medium text-gray-800 text-sm">
+                          <div className="flex items-end gap-4 sm:gap-6">
+                            <p className="font-medium text-gray-800 text-sm ">
                               {decrypt(comment.writer)}
+                            </p>
+
+                            <p className="font-light text-gray-500 text-xs ">
+                              {getDate(comment.createdAt)}
                             </p>
                           </div>
 

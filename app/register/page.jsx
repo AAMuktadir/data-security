@@ -3,6 +3,7 @@ import React from "react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Domain } from "@/utils/constants";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 export default function Page() {
   const [studentExists, setStudentExists] = useState(null);
@@ -19,15 +20,38 @@ export default function Page() {
     password: "",
   });
 
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleTogglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   if (!Domain) {
     return null;
   }
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    // Validate password if it's the password field
+    if (name === "password" && !validatePassword(value)) {
+      // Optionally set an error state or show a message to the user
+      console.log(
+        "Password must be at least 6 characters long and include an alphabet and a number."
+      );
+    }
+
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
+  };
+
+  const validatePassword = (password) => {
+    const hasMinLength = password.length >= 6;
+    const hasAlphaNum = /^(?=.*[a-zA-Z])(?=.*\d).+$/.test(password);
+
+    return hasMinLength && hasAlphaNum;
   };
 
   const handleSubmit = async (e) => {
@@ -170,18 +194,33 @@ export default function Page() {
               />
             </div>
 
-            <div className="mt-4">
+            <div className="my-4">
               <label className="block" htmlFor="password">
                 Password
               </label>
-              <input
-                type="password"
-                placeholder="Password"
-                name="password"
-                onChange={handleChange}
-                className="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600"
-                required
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Password"
+                  name="password"
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600"
+                  required
+                />
+                <div
+                  className="absolute right-4 top-1 flex items-center cursor-pointer h-full text-gray-500"
+                  onClick={handleTogglePasswordVisibility}
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </div>
+              </div>
+
+              {formData.password && !validatePassword(formData.password) && (
+                <span className="text-red-500 text-xs">
+                  Password must be at least 6 characters long and include an
+                  alphabet and a number.
+                </span>
+              )}
             </div>
 
             <button
