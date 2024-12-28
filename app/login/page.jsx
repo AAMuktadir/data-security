@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Domain } from "@/utils/constants";
 
 export default function Login() {
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     studentID: "",
     password: "",
@@ -26,6 +27,7 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
     try {
       const response = await fetch(`${Domain}/api/login`, {
@@ -45,6 +47,8 @@ export default function Login() {
       }
     } catch (error) {
       console.error("Login error:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -116,9 +120,12 @@ export default function Login() {
           <div>
             <button
               type="submit"
-              className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              disabled={isLoading}
+              className={`group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white ${
+                isLoading ? "bg-gray-400" : "bg-indigo-600 hover:bg-indigo-700"
+              } focus:outline-none focus:ring-2 focus:ring-indigo-500`}
             >
-              Sign In
+              {isLoading ? "Loading..." : "Sign In"}
             </button>
           </div>
         </form>

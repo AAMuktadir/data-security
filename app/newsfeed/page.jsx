@@ -163,8 +163,8 @@ export default function Page() {
           )}
         </div>
         <div className="">
-          {feedData &&
-            (feedData && feedData.length > 0 ? (
+          {feedData ? (
+            feedData && feedData.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
                 {feedData.map((post, index) => (
                   <div
@@ -232,7 +232,12 @@ export default function Page() {
                 Currently, The newsfeed is empty. Please click the {"'"}Add New
                 Post{"'"} button to create a new post.
               </div>
-            ))}
+            )
+          ) : (
+            <div className="flex items-center justify-center w-full h-full text-xl">
+              Loading...
+            </div>
+          )}
 
           {/* Modal */}
           {selectedPost && (
