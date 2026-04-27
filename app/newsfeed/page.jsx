@@ -133,7 +133,7 @@ export default function Page() {
               <div key={index} className="glass-card p-5 flex flex-col gap-3">
                 {/* Card Header */}
                 <div className="flex items-center justify-between">
-                  <span className="status-encrypted">�� Encrypted</span>
+                  <span className="status-encrypted">🔒 Encrypted</span>
                   <span className="text-white/40 text-xs">{getDate(post.createdAt)}</span>
                 </div>
 
