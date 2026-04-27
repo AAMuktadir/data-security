@@ -167,20 +167,12 @@ export default function Page() {
                 {/* Actions */}
                 <div className="flex items-center justify-between gap-2">
                   {post.author_id === userData?._id && (
-                    <>
-                      <button
-                        onClick={() => openDeleteModal(post._id)}
-                        className="btn-danger text-xs py-1.5 px-3 flex items-center gap-1"
-                      >
-                        <FaTrash className="text-xs" /> Delete
-                      </button>
-                      <ConfirmDelete
-                        isOpen={isDeleteModalOpen && currentPostId === post._id}
-                        onClose={closeDeleteModal}
-                        onConfirm={handleConfirm}
-                        postId={currentPostId}
-                      />
-                    </>
+                    <button
+                      onClick={() => openDeleteModal(post._id)}
+                      className="btn-danger text-xs py-1.5 px-3 flex items-center gap-1"
+                    >
+                      <FaTrash className="text-xs" /> Delete
+                    </button>
                   )}
                   <div className="flex items-center gap-2 ml-auto">
                     <Link
@@ -206,6 +198,12 @@ export default function Page() {
       {isModalOpen && (
         <NewPostModal onClose={() => setIsModalOpen(false)} onSubmit={handleSubmit} />
       )}
+      <ConfirmDelete
+        isOpen={isDeleteModalOpen}
+        onClose={closeDeleteModal}
+        onConfirm={handleConfirm}
+        postId={currentPostId}
+      />
       {selectedPost && (
         <PostModal selectedPost={selectedPost} closeModal={closeModal} userData={userData} />
       )}

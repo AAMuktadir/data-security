@@ -3,7 +3,7 @@ import { decrypt } from "@/utils/crypto";
 import { FaTimes, FaUser, FaEnvelope, FaVenusMars, FaUniversity, FaBookOpen, FaInfoCircle } from "react-icons/fa";
 
 export default function UpdateUserInfoModal({ userData, onClose, onUpdate }) {
-  const [userId] = useState(userData._id);
+  const userId = userData._id;
   const [name, setName] = useState(decrypt(userData.name));
   const [email, setEmail] = useState(decrypt(userData.email));
   const [gender, setGender] = useState(decrypt(userData.gender));
