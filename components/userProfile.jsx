@@ -1,133 +1,123 @@
 import React from "react";
 import { decrypt } from "@/utils/crypto";
+import { FaLock, FaLockOpen, FaEdit, FaUser, FaEnvelope, FaIdCard, FaUniversity, FaBookOpen, FaVenusMars, FaInfoCircle } from "react-icons/fa";
 
-export default function UserProfile({
-  userData,
-  showEncrypted,
-  setShowEncrypted,
-  setIsModalOpen,
-}) {
-  return (
-    <div className="bg-gray-50 min-h-screen flex flex-col items-center px-4 sm:px-6">
-      <div className="max-w-4xl w-full bg-white shadow-lg rounded-lg p-6">
-        <h2 className="text-2xl font-bold text-gray-800 mb-6">User Profile</h2>
+const ProfileField = ({ icon: Icon, label, value, isEncrypted }) => (
+  <div className="glass rounded-xl p-4 group">
+    <div className="flex items-center gap-2 mb-2">
+      <Icon className="text-cyan-400 text-sm" />
+      <span className="text-white/50 text-xs font-medium uppercase tracking-wider">{label}</span>
+      {isEncrypted !== undefined && (
+        <span className={isEncrypted ? "status-encrypted ml-auto" : "status-decrypted ml-auto"}>
+          {isEncrypted ? "🔒 Encrypted" : "🔓 Decrypted"}
+        </span>
+      )}
+    </div>
+    <p className={isEncrypted ? "encrypted-text" : "text-white font-medium text-sm break-words"}>
+      {value}
+    </p>
+  </div>
+);
 
-        {/* Button Group */}
-        <div className="flex gap-4 sm:gap-8 items-center mb-6 text-sm">
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 sm:px-6 rounded-lg shadow-md focus:outline-none transition"
-          >
-            Update Info
-          </button>
-          <button
-            onClick={() => setShowEncrypted(!showEncrypted)}
-            className={`py-2 px-4 sm:px-6 rounded-lg transition ${
-              showEncrypted
-                ? "bg-green-500 hover:bg-green-600"
-                : "bg-purple-500 hover:bg-purple-600"
-            } text-white`}
-          >
-            {showEncrypted ? "Actual Data" : "Encrypted Data"}
-          </button>
+export default function UserProfile({ userData, showEncrypted, setShowEncrypted, setIsModalOpen }) {
+  if (!userData) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="text-center space-y-4">
+          <div className="w-12 h-12 border-2 border-cyan-400/30 border-t-cyan-400 rounded-full animate-spin mx-auto" />
+          <p className="text-white/50">Loading your secure profile...</p>
         </div>
+      </div>
+    );
+  }
 
-        {userData ? (
-          <div className="space-y-6">
-            {/* Name */}
-            <div className="">
-              <h3 className="text-lg font-medium text-gray-800 break-words">
-                <span className="font-semibold">Name: </span>{" "}
-                {showEncrypted ? (
-                  <span>{userData.name}</span>
-                ) : (
-                  <span className="text-gray-600">
-                    {decrypt(userData.name)}
-                  </span>
-                )}
-              </h3>
+  const fields = [
+    { icon: FaUser, label: "Name", key: "name", encrypted: true },
+    { icon: FaIdCard, label: "Student ID", key: "studentID", encrypted: false },
+    { icon: FaEnvelope, label: "Email", key: "email", encrypted: true },
+    { icon: FaVenusMars, label: "Gender", key: "gender", encrypted: true },
+    { icon: FaUniversity, label: "University", key: "university", encrypted: true },
+    { icon: FaBookOpen, label: "Department", key: "department", encrypted: true },
+    { icon: FaInfoCircle, label: "Bio", key: "bio", encrypted: true },
+  ];
+
+  return (
+    <main className="min-h-screen px-4 sm:px-6 py-8">
+      <div className="max-w-4xl mx-auto space-y-6">
+        {/* Profile Header Card */}
+        <div className="glass-strong rounded-2xl p-6">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-500 to-violet-600 flex items-center justify-center text-2xl font-bold text-white shadow-lg">
+                {decrypt(userData.name).charAt(0).toUpperCase()}
+              </div>
+              <div>
+                <h1 className="text-xl font-bold text-white">{decrypt(userData.name)}</h1>
+                <p className="text-white/50 text-sm">{userData.studentID}</p>
+              </div>
             </div>
 
-            {/* Student ID */}
-            <div className="">
-              <h3 className="text-lg font-medium text-gray-800 break-words">
-                <span className="font-semibold">Student ID: </span>{" "}
-                <span className="text-gray-600">{userData.studentID}</span>
-              </h3>
-            </div>
-
-            {/* Email */}
-            <div className="">
-              <h3 className="text-lg font-medium text-gray-800 break-words">
-                <span className="font-semibold">Email: </span>{" "}
-                {showEncrypted ? (
-                  <span>{userData.email}</span>
-                ) : (
-                  <span className="text-gray-600">
-                    {decrypt(userData.email)}
-                  </span>
-                )}
-              </h3>
-            </div>
-
-            {/* Gender */}
-            <div className="">
-              <h3 className="text-lg font-medium text-gray-800 break-words">
-                <span className="font-semibold">Gender: </span>{" "}
-                {showEncrypted ? (
-                  <span>{userData.gender}</span>
-                ) : (
-                  <span className="text-gray-600">
-                    {decrypt(userData.gender)}
-                  </span>
-                )}
-              </h3>
-            </div>
-
-            {/* University */}
-            <div className="">
-              <h3 className="text-lg font-medium text-gray-800 break-words">
-                <span className="font-semibold">University: </span>{" "}
-                {showEncrypted ? (
-                  <span>{userData.university}</span>
-                ) : (
-                  <span className="text-gray-600">
-                    {decrypt(userData.university)}
-                  </span>
-                )}
-              </h3>
-            </div>
-
-            {/* Department */}
-            <div className="">
-              <h3 className="text-lg font-medium text-gray-800 break-words">
-                <span className="font-semibold">Department: </span>{" "}
-                {showEncrypted ? (
-                  <span>{userData.department}</span>
-                ) : (
-                  <span className="text-gray-600">
-                    {decrypt(userData.department)}
-                  </span>
-                )}
-              </h3>
-            </div>
-
-            {/* Bio */}
-            <div className="">
-              <h3 className="text-lg font-medium text-gray-800">
-                <span className="font-semibold">Bio: </span>{" "}
-                {showEncrypted ? (
-                  <span className="break-words">{userData.bio}</span>
-                ) : (
-                  <span className="text-gray-600">{decrypt(userData.bio)}</span>
-                )}
-              </h3>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setShowEncrypted(!showEncrypted)}
+                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all border ${
+                  showEncrypted
+                    ? "bg-violet-500/20 border-violet-500/40 text-violet-300 hover:bg-violet-500/30"
+                    : "bg-emerald-500/20 border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/30"
+                }`}
+              >
+                {showEncrypted ? <FaLock /> : <FaLockOpen />}
+                {showEncrypted ? "Show Decrypted" : "Show Encrypted"}
+              </button>
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium bg-cyan-500/20 border border-cyan-500/40 text-cyan-300 hover:bg-cyan-500/30 transition-all"
+              >
+                <FaEdit />
+                Edit Profile
+              </button>
             </div>
           </div>
-        ) : (
-          <p className="text-center text-gray-500">Loading user data...</p>
-        )}
+        </div>
+
+        {/* Encryption Status Banner */}
+        <div className={`rounded-xl px-4 py-3 flex items-center gap-3 border transition-all ${
+          showEncrypted
+            ? "bg-violet-500/10 border-violet-500/30"
+            : "bg-emerald-500/10 border-emerald-500/30"
+        }`}>
+          {showEncrypted ? (
+            <>
+              <FaLock className="text-violet-400 flex-shrink-0" />
+              <span className="text-violet-300 text-sm">Viewing raw encrypted data as stored in the database (AES-256)</span>
+            </>
+          ) : (
+            <>
+              <FaLockOpen className="text-emerald-400 flex-shrink-0" />
+              <span className="text-emerald-300 text-sm">Viewing decrypted data — fields are decrypted client-side using AES-256</span>
+            </>
+          )}
+        </div>
+
+        {/* Profile Fields Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {fields.map(({ icon, label, key, encrypted }) => (
+            <ProfileField
+              key={key}
+              icon={icon}
+              label={label}
+              value={
+                encrypted && showEncrypted
+                  ? userData[key]
+                  : encrypted
+                  ? decrypt(userData[key])
+                  : userData[key]
+              }
+              isEncrypted={encrypted ? showEncrypted : undefined}
+            />
+          ))}
+        </div>
       </div>
-    </div>
+    </main>
   );
 }

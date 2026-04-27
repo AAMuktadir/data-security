@@ -3,43 +3,31 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Domain } from "@/utils/constants";
+import { FaLock, FaIdCard } from "react-icons/fa";
 
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    studentID: "",
-    password: "",
-  });
+  const [formData, setFormData] = useState({ studentID: "", password: "" });
   const [responseData, setResponseData] = useState(null);
-
   const router = useRouter();
 
-  if (!Domain) {
-    return null;
-  }
+  if (!Domain) return null;
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-
+    setResponseData(null);
     try {
       const response = await fetch(`${Domain}/api/login`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-
       const data = await response.json();
-
       if (response.ok) {
         router.push("/");
       } else {
@@ -47,94 +35,102 @@ export default function Login() {
       }
     } catch (error) {
       console.error("Login error:", error);
+      setResponseData("Something went wrong. Please try again.");
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="text-center text-3xl font-extrabold text-gray-900">
-            Welcome Back
-          </h2>
-          <p className="text-center text-sm text-gray-600">
-            Sign in to access your account
-          </p>
+    <div className="min-h-screen flex items-center justify-center px-4 py-12 relative overflow-hidden">
+      {/* Background orbs */}
+      <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-1/4 right-1/4 w-72 h-72 bg-violet-500/10 rounded-full blur-3xl pointer-events-none" />
+
+      <div className="w-full max-w-md space-y-6 relative z-10">
+        {/* Header */}
+        <div className="text-center space-y-2">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-cyan-500 to-violet-600 mb-4 shadow-lg glow-cyan">
+            <FaLock className="text-white text-2xl" />
+          </div>
+          <h1 className="text-3xl font-bold text-gradient">Welcome Back</h1>
+          <p className="text-white/50 text-sm">Sign in to your secure vault</p>
         </div>
 
-        <form
-          className="mt-8 space-y-6 bg-white p-8 rounded-lg shadow-lg hover:shadow-2xl transition-all duration-300"
-          onSubmit={handleSubmit}
-        >
-          <div className="rounded-md shadow-sm space-y-4">
+        {/* Form Card */}
+        <div className="glass-strong rounded-2xl p-8 shadow-2xl">
+          <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label
-                htmlFor="studentID"
-                className="block text-sm font-medium text-gray-700"
-              >
+              <label htmlFor="studentID" className="block text-sm font-medium text-white/70 mb-2">
                 Student ID
               </label>
-              <input
-                id="studentID"
-                name="studentID"
-                type="text"
-                required
-                className="appearance-none block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                placeholder="Enter Student ID"
-                value={formData.studentID}
-                onChange={handleChange}
-              />
+              <div className="relative">
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-white/30">
+                  <FaIdCard />
+                </span>
+                <input
+                  id="studentID"
+                  name="studentID"
+                  type="text"
+                  required
+                  className="input-glass pl-9"
+                  placeholder="Enter your Student ID"
+                  value={formData.studentID}
+                  onChange={handleChange}
+                />
+              </div>
             </div>
 
             <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700"
-              >
+              <label htmlFor="password" className="block text-sm font-medium text-white/70 mb-2">
                 Password
               </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                required
-                className="appearance-none block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                placeholder="Enter Password"
-                value={formData.password}
-                onChange={handleChange}
-              />
+              <div className="relative">
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-white/30">
+                  <FaLock />
+                </span>
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  required
+                  className="input-glass pl-9"
+                  placeholder="Enter your password"
+                  value={formData.password}
+                  onChange={handleChange}
+                />
+              </div>
             </div>
-          </div>
 
-          <div className="flex items-center justify-between mt-4">
-            <Link
-              href="/register"
-              className="text-indigo-600 hover:text-indigo-500 text-sm"
-            >
-              Create account
-            </Link>
-          </div>
+            {responseData && (
+              <div className="bg-rose-500/15 border border-rose-500/30 rounded-xl px-4 py-3 text-rose-400 text-sm">
+                {responseData}
+              </div>
+            )}
 
-          <div>
             <button
               type="submit"
               disabled={isLoading}
-              className={`group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white ${
-                isLoading ? "bg-gray-400" : "bg-indigo-600 hover:bg-indigo-700"
-              } focus:outline-none focus:ring-2 focus:ring-indigo-500`}
+              className="btn-primary w-full flex items-center justify-center gap-2 py-3"
             >
-              {isLoading ? "Loading..." : "Sign In"}
+              {isLoading ? (
+                <>
+                  <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  Authenticating...
+                </>
+              ) : (
+                "Sign In"
+              )}
             </button>
-          </div>
-        </form>
+          </form>
+        </div>
 
-        {responseData && (
-          <p className="text-red-500 text-center mt-2 text-sm">
-            {responseData}
-          </p>
-        )}
+        <p className="text-center text-white/50 text-sm">
+          No account yet?{" "}
+          <Link href="/register" className="text-cyan-400 hover:text-cyan-300 font-medium transition-colors">
+            Create one
+          </Link>
+        </p>
       </div>
     </div>
   );
