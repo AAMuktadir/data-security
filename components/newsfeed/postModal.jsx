@@ -1,25 +1,15 @@
 import React, { useState } from "react";
 import { decrypt } from "@/utils/crypto";
 import { Domain } from "@/utils/constants";
+import { FaTimes, FaComments, FaNewspaper, FaTrash, FaPaperPlane, FaLock } from "react-icons/fa";
 
 export default function PostModal({ selectedPost, closeModal, userData }) {
   const [showPost, setShowPost] = useState(true);
   const [comment, setComment] = useState("");
 
-  const handlePost = () => {
-    if (!showPost) {
-      setShowPost(true);
-    } else setShowPost(false);
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Check for empty comment
-    if (!comment.trim()) {
-      console.error("Comment cannot be empty");
-      return;
-    }
+    if (!comment.trim()) return;
 
     const data = {
       post_id: selectedPost?._id,
@@ -30,24 +20,15 @@ export default function PostModal({ selectedPost, closeModal, userData }) {
     try {
       const response = await fetch(`${Domain}/api/comments`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
-
       const rdata = await response.json();
-
-      if (!response.ok) {
-        console.error(
-          "Comment addition error:",
-          rdata.message || "Unknown error"
-        );
-      } else {
-        console.log("Comment successfully posted:", rdata);
-        setComment(""); // Clear the input
+      if (response.ok) {
+        setComment("");
         window.location.reload();
+      } else {
+        console.error("Comment addition error:", rdata.message || "Unknown error");
       }
     } catch (error) {
       console.error("New comment addition error:", error);
@@ -55,17 +36,11 @@ export default function PostModal({ selectedPost, closeModal, userData }) {
   };
 
   const deleteComment = async (post_id, comment_id) => {
-    const data = {
-      postID: post_id,
-      commentID: comment_id,
-    };
     try {
-      const response = await fetch(`${Domain}/api/comments`, {
+      await fetch(`${Domain}/api/comments`, {
         method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ postID: post_id, commentID: comment_id }),
       });
       window.location.reload();
     } catch (error) {
@@ -73,115 +48,111 @@ export default function PostModal({ selectedPost, closeModal, userData }) {
     }
   };
 
+  if (!selectedPost) return null;
+
   return (
-    <>
-      {selectedPost && (
-        <div className="fixed inset-0 flex justify-center items-center bg-gray-800 bg-opacity-50 px-4 sm:px-6 py-12 sm:py-0">
-          <div className="bg-white rounded-lg shadow-lg w-full max-w-2xl h-full sm:h-96 flex flex-col overflow-hidden">
-            <div className="p-6 border-b">
-              <h2 className="text-center text-2xl font-semibold text-gray-800">
-                {decrypt(selectedPost.title)}
-              </h2>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4 py-8">
+      <div className="glass-strong rounded-2xl w-full max-w-2xl flex flex-col shadow-2xl" style={{ maxHeight: "85vh" }}>
+        {/* Header */}
+        <div className="p-5 border-b border-white/10 flex items-start justify-between gap-4">
+          <div className="flex-1">
+            <div className="flex items-center gap-2 mb-1">
+              <span className="status-encrypted text-xs">🔒 Encrypted Post</span>
             </div>
-            <div className="p-4 sm:p-6 overflow-y-auto flex-1">
-              {showPost ? (
-                <p className="text-gray-600 text-sm leading-relaxed text-justify">
-                  {decrypt(selectedPost.content)}
-                </p>
-              ) : (
-                <div className="">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-2">
-                    Comments
-                  </h3>
-                  {selectedPost.comments && selectedPost.comments.length > 0 ? (
-                    <ul className="space-y-4">
-                      {selectedPost.comments.map((comment) => (
-                        <li
-                          key={comment._id}
-                          className="border border-gray-300 rounded-lg p-3 bg-white shadow-sm"
+            <h2 className="text-lg font-bold text-white leading-snug">
+              {decrypt(selectedPost.title)}
+            </h2>
+            <p className="text-white/50 text-sm mt-1">by {decrypt(selectedPost.author)}</p>
+          </div>
+          <button
+            onClick={closeModal}
+            className="text-white/40 hover:text-white transition-colors p-1 rounded-lg hover:bg-white/10 flex-shrink-0"
+            aria-label="Close"
+          >
+            <FaTimes />
+          </button>
+        </div>
+
+        {/* Tab Switcher */}
+        <div className="flex border-b border-white/10">
+          <button
+            onClick={() => setShowPost(true)}
+            className={`flex-1 py-3 text-sm font-medium flex items-center justify-center gap-2 transition-all ${
+              showPost ? "text-cyan-400 border-b-2 border-cyan-400" : "text-white/50 hover:text-white/80"
+            }`}
+          >
+            <FaNewspaper /> Post
+          </button>
+          <button
+            onClick={() => setShowPost(false)}
+            className={`flex-1 py-3 text-sm font-medium flex items-center justify-center gap-2 transition-all ${
+              !showPost ? "text-cyan-400 border-b-2 border-cyan-400" : "text-white/50 hover:text-white/80"
+            }`}
+          >
+            <FaComments /> Comments {selectedPost.comments?.length > 0 && `(${selectedPost.comments.length})`}
+          </button>
+        </div>
+
+        {/* Body */}
+        <div className="flex-1 overflow-y-auto p-5">
+          {showPost ? (
+            <p className="text-white/70 text-sm leading-relaxed">
+              {decrypt(selectedPost.content)}
+            </p>
+          ) : (
+            <div className="space-y-3">
+              {selectedPost.comments && selectedPost.comments.length > 0 ? (
+                selectedPost.comments.map((c) => (
+                  <div key={c._id} className="glass rounded-xl p-3">
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <p className="text-cyan-400 text-sm font-medium">{decrypt(c.writer)}</p>
+                        <p className="text-white/70 text-sm mt-1">{decrypt(c.content)}</p>
+                      </div>
+                      {userData._id === selectedPost.author_id && (
+                        <button
+                          onClick={() => deleteComment(selectedPost._id, c._id)}
+                          className="text-rose-400/60 hover:text-rose-400 transition-colors flex-shrink-0 p-1"
+                          aria-label="Delete comment"
                         >
-                          <div className="flex justify-between">
-                            <div className="">
-                              {/* Writer Name */}
-                              <div className="flex items-center">
-                                <p className="font-medium text-gray-800 text-sm">
-                                  {decrypt(comment.writer)}
-                                </p>
-                              </div>
-
-                              {/* Comment Content */}
-                              <div className="mt-1">
-                                <p className="text-gray-600 text-sm">
-                                  {decrypt(comment.content)}
-                                </p>
-                              </div>
-                            </div>
-
-                            {userData._id === selectedPost.author_id && (
-                              <p
-                                className="text-xs text-red-500 cursor-pointer"
-                                onClick={() =>
-                                  deleteComment(selectedPost._id, comment._id)
-                                }
-                              >
-                                Delete
-                              </p>
-                            )}
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p className="text-gray-500 text-sm">
-                      No comments yet. Be the first to comment!
-                    </p>
-                  )}
-
-                  <form
-                    onSubmit={handleSubmit}
-                    className="flex gap-4 w-full pt-2"
-                  >
-                    <div className="bg-gray-100 rounded-lg p-2 shadow-inner w-full">
-                      <input
-                        type="text"
-                        id="comment"
-                        value={comment}
-                        onChange={(e) => setComment(e.target.value)}
-                        className="w-full bg-transparent text-gray-800 text-base focus:outline-none placeholder-gray-400"
-                        placeholder="Comment here..."
-                        required
-                      />
+                          <FaTrash className="text-xs" />
+                        </button>
+                      )}
                     </div>
-
-                    <button
-                      type="submit"
-                      className="bg-gradient-to-r from-blue-400 to-blue-500 text-white px-6 py-2 rounded-lg shadow-md hover:from-blue-500 hover:to-blue-600 transition duration-200 text-lg"
-                    >
-                      Send
-                    </button>
-                  </form>
+                  </div>
+                ))
+              ) : (
+                <div className="text-center py-8">
+                  <FaComments className="text-white/20 text-4xl mx-auto mb-3" />
+                  <p className="text-white/40 text-sm">No comments yet. Be the first!</p>
                 </div>
               )}
             </div>
-
-            <div className="p-4 border-t text-center flex justify-center gap-8">
-              <button
-                className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-200"
-                onClick={closeModal}
-              >
-                Close
-              </button>
-
-              <button
-                className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-200"
-                onClick={handlePost}
-              >
-                {showPost ? "Comments" : "Post"}
-              </button>
-            </div>
-          </div>
+          )}
         </div>
-      )}
-    </>
+
+        {/* Comment Input */}
+        {!showPost && (
+          <div className="p-4 border-t border-white/10">
+            <form onSubmit={handleSubmit} className="flex gap-3">
+              <input
+                type="text"
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                className="input-glass flex-1 py-2"
+                placeholder="Add a comment... (will be encrypted)"
+                required
+              />
+              <button type="submit" className="btn-primary px-4 py-2 flex items-center gap-2">
+                <FaPaperPlane className="text-sm" />
+              </button>
+            </form>
+            <p className="text-white/30 text-xs mt-2 flex items-center gap-1">
+              <FaLock className="text-xs" /> Comments are encrypted with AES-256
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
   );
 }

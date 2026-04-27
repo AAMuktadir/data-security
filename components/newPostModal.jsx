@@ -1,5 +1,5 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
+import { FaTimes, FaLock } from "react-icons/fa";
 
 export default function NewPostModal({ onClose, onSubmit }) {
   const [title, setTitle] = useState("");
@@ -10,62 +10,61 @@ export default function NewPostModal({ onClose, onSubmit }) {
     onSubmit({ title, content });
     onClose();
   };
+
   return (
-    <div className="fixed inset-0 flex items-center justify-center overflow-y-auto bg-black bg-opacity-50 px-4 sm:px-0">
-      <div className="bg-white p-4 sm:p-8 rounded-lg w-full max-w-lg shadow-lg relative">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4">
+      <div className="glass-strong rounded-2xl w-full max-w-lg p-6 shadow-2xl relative">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition duration-200 focus:outline-none"
+          className="absolute top-4 right-4 text-white/40 hover:text-white transition-colors p-1 rounded-lg hover:bg-white/10"
+          aria-label="Close modal"
         >
-          <span className="text-2xl font-bold">&times;</span>
+          <FaTimes className="text-lg" />
         </button>
-        <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
-          Add New Post
-        </h2>
-        <form onSubmit={handleSubmit} className="space-y-5">
+
+        <div className="flex items-center gap-3 mb-6">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-cyan-500 to-violet-600 flex items-center justify-center">
+            <FaLock className="text-white text-sm" />
+          </div>
+          <h2 className="text-xl font-bold text-white">New Encrypted Post</h2>
+        </div>
+
+        <div className="bg-cyan-500/10 border border-cyan-500/20 rounded-xl px-4 py-2 mb-5 text-cyan-400 text-xs flex items-center gap-2">
+          <FaLock className="flex-shrink-0" />
+          Your post title and content will be AES-256 encrypted before storage.
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label
-              htmlFor="title"
-              className="block text-sm font-semibold text-gray-700 mb-2"
-            >
-              Title
-            </label>
-            <div className="bg-gray-50 rounded-lg p-3 shadow-inner">
-              <input
-                type="text"
-                id="title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                className="w-full bg-transparent text-gray-800 text-base focus:outline-none placeholder-gray-400"
-                placeholder="Enter post title..."
-                required
-              />
-            </div>
+            <label htmlFor="title" className="block text-sm font-medium text-white/70 mb-2">Title</label>
+            <input
+              type="text"
+              id="title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="input-glass"
+              placeholder="Enter post title..."
+              required
+            />
           </div>
           <div>
-            <label
-              htmlFor="content"
-              className="block text-sm font-semibold text-gray-700 mb-2"
-            >
-              Content
-            </label>
-            <div className="bg-gray-50 rounded-lg p-3 shadow-inner h-60">
-              <textarea
-                id="content"
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                className="w-full h-full bg-transparent text-gray-800 text-base focus:outline-none placeholder-gray-400"
-                placeholder="Write your content here..."
-                required
-              ></textarea>
-            </div>
+            <label htmlFor="content" className="block text-sm font-medium text-white/70 mb-2">Content</label>
+            <textarea
+              id="content"
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              className="input-glass resize-none"
+              style={{ height: "10rem" }}
+              placeholder="Write your content here..."
+              required
+            />
           </div>
-          <div className="flex justify-end">
-            <button
-              type="submit"
-              className="bg-gradient-to-r from-blue-400 to-blue-500 text-white px-6 py-2 rounded-lg shadow-md hover:from-blue-500 hover:to-blue-600 transition duration-200 text-lg"
-            >
-              Post
+          <div className="flex gap-3 pt-1">
+            <button type="submit" className="btn-primary flex-1 py-2.5">
+              Encrypt &amp; Publish
+            </button>
+            <button type="button" onClick={onClose} className="btn-ghost py-2.5 px-6">
+              Cancel
             </button>
           </div>
         </form>

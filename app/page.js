@@ -15,9 +15,7 @@ export default function Home() {
     try {
       const response = await fetch(`${Domain}/api/extractdata`, {
         method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
       });
       const data = await response.json();
       setUserData(data.data);
@@ -27,19 +25,14 @@ export default function Home() {
   };
 
   const handleUpdate = async (data) => {
-    console.log("Updated user data:", data);
     try {
       const response = await fetch("/api/users", {
         method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
-
       const rdata = await response.json();
       getUserInfo();
-
       if (!response.ok) {
         console.error("Update error:", rdata.message);
       }
@@ -49,30 +42,24 @@ export default function Home() {
   };
 
   useEffect(() => {
-    if (!Domain) {
-      return null;
-    } else {
-      getUserInfo();
-    }
+    if (!Domain) return;
+    getUserInfo();
   }, []);
 
   return (
-    <main className="">
-      <Header
-        name={(userData && "Hey " + decrypt(userData.name)) || "Hey there"}
-      />
+    <main>
+      <Header name={(userData && "Hey, " + decrypt(userData.name)) || "Hey there"} />
       <UserProfile
         userData={userData}
         showEncrypted={showEncrypted}
         setShowEncrypted={setShowEncrypted}
         setIsModalOpen={setIsModalOpen}
       />
-
       {isModalOpen && (
         <UpdateUserInfoModal
           userData={userData}
-          onClose={() => setIsModalOpen(false)} // Close modal
-          onUpdate={handleUpdate} // Handle update
+          onClose={() => setIsModalOpen(false)}
+          onUpdate={handleUpdate}
         />
       )}
     </main>
